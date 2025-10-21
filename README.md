@@ -7,7 +7,7 @@
 [![torch-2.7.0](https://img.shields.io/badge/PyTorch-2.7.0-orange.svg)](https://pytorch.org/)
 [![scanpy-1.11.1](https://img.shields.io/badge/Scanpy-1.11.1-blue)](https://scanpy.readthedocs.io/en/stable/)
 [![transformers-4.51.3](https://img.shields.io/badge/🤗%20Transformers-4.51.3-yellow)](https://github.com/huggingface/transformers)
-[![Paper-Preprint](https://img.shields.io/badge/Paper-Preprint-red)](https://arxiv.org/abs/YOUR_ARXIV_ID) <!-- 请替换为您的论文链接 -->
+[![Paper-Preprint](https://img.shields.io/badge/Paper-Preprint-red)](https://www.biorxiv.org/content/10.1101/2025.09.05.674596v2) <!-- 请替换为您的论文链接 -->
 
 ---
 

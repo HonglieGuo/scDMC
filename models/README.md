@@ -16,7 +16,7 @@ You need to download our pre-trained base model from the Hugging Face Hub and pl
 
 1.  **Visit the Hugging Face Model Repository**:
     Please click the following link to access our official model repository:
-    [https://huggingface.co/Honglie/scDMC-models](https://huggingface.co/Honglie/scDMC-models) *(Please note: If your model repository address is different, please update the link here)*
+    [https://huggingface.co/Honglie/scDMC-models](https://huggingface.co/Honglie/scDMC-models)
 
 2.  **Download the Model Files**:
     On the Hugging Face page, please download all files in the repository, especially `pytorch_model.bin`, `config.json`, etc.

@@ -1,13 +1,16 @@
 
 ---
 
-# scDMC: Synergistic Pre-training of Single-Cell Language Models with Dual-Stream MLM and Contrastive Learning
+# ScDMC: Synergistic Pre-training of Single-Cell Language Models with Dual-Stream MLM and Contrastive Learning
 
 [![python-3.12](https://img.shields.io/badge/Python-3.12-blue.svg)](https://www.python.org/downloads/release/python-3120/)
 [![torch-2.7.0](https://img.shields.io/badge/PyTorch-2.7.0-orange.svg)](https://pytorch.org/)
 [![scanpy-1.11.1](https://img.shields.io/badge/Scanpy-1.11.1-blue)](https://scanpy.readthedocs.io/en/stable/)
 [![transformers-4.51.3](https://img.shields.io/badge/🤗%20Transformers-4.51.3-yellow)](https://github.com/huggingface/transformers)
-[![Paper-Preprint](https://img.shields.io/badge/Paper-Preprint-red)](https://arxiv.org/abs/YOUR_ARXIV_ID) <!-- 请替换为您的论文链接 -->
+[![Paper-Genome_Biology](https://img.shields.io/badge/Paper-Genome_Biology-green.svg)](https://doi.org/10.1186/s13059-026-04193-w)
+[![DOI](https://img.shields.io/badge/DOI-10.1186%2Fs13059--026--04193--w-blue.svg)](https://doi.org/10.1186/s13059-026-04193-w)
+[![HuggingFace-Models](https://img.shields.io/badge/🤗%20HuggingFace-Models-orange)](https://huggingface.co/Honglie/scDMC-models/tree/main)
+[![HuggingFace-Datasets](https://img.shields.io/badge/🤗%20HuggingFace-Datasets-green)](https://huggingface.co/datasets/Honglie/scDMC-datasets)
 
 ---
 
@@ -41,10 +44,10 @@ This dual-stream, dual-task design allows scDMC to build a more comprehensive an
 
 As demonstrated in our study, scDMC exhibits several key advantages:
 
--   **🚀 State-of-the-Art Performance**: Achieves superior results across multiple challenging benchmarks.
--   **⚙️ High Data Efficiency**: Reaches top performance by pre-training on only 2 million cells, significantly fewer than many contemporary models. 
--   **🧩 Robust Batch Correction**: Effectively integrates datasets from diverse donors and technology platforms, preserving biological identity while removing technical noise.
+-   **🚀 State-of-the-Art Performance**: Achieves superior results in cell type annotation across multiple challenging benchmarks.
+-   **⚙️ High Data Efficiency**: Reaches top performance by pre-training on only 2 million cells, significantly fewer than many contemporary models.
 -   **🔬 Deep Biological Interpretability**: The learned embeddings not only classify cells accurately but also uncover functional gene modules and infer cell-type-specific regulatory networks in a data-driven manner.
+-   **🧩 Robust Batch Correction**: Effectively integrates datasets from diverse donors and technology platforms, preserving biological identity while removing technical noise.
 
 ---
 
@@ -54,7 +57,7 @@ We strongly recommend creating a dedicated `conda` environment from the provided
 
 **1. Clone the repository:**
 ```bash
-git clone https://github.com/HonglieGuo/scDMC.git
+git clone https://github.com/your-username/scDMC.git
 cd scDMC
 ```
 
@@ -74,7 +77,22 @@ pip install -r requirements.txt
 
 ---
 
-## Workflow and Quick Start
+## Pre-trained Models & Step-by-step Tutorials
+
+To maximize accessibility and facilitate broad community adoption, we directly provide the **scDMC pre-trained model weights** on HuggingFace, removing the computational burden of pre-training from scratch.
+
+- **Models (Pre-trained Weights)**: [🤗 HuggingFace Models](https://huggingface.co/Honglie/scDMC-models/tree/main)
+- **Datasets**: [🤗 HuggingFace Datasets](https://huggingface.co/datasets/Honglie/scDMC-datasets)
+
+We also provide comprehensive Jupyter Notebook tutorials to help you quickly get started:
+- [**Quick_Start_Tutorial.ipynb**](./tutorials/Quick_Start_Tutorial.ipynb): A step-by-step guide on how to:
+    - One-click **download and load scDMC's pre-trained weights**.
+    - **Convert custom single-cell `.h5ad` data** into the dual-stream input format (Rank and EPE).
+    - Perform low-cost **fine-tuning** for downstream tasks (e.g., cell-type classification).
+
+---
+
+## Workflow and Usage Details
 
 The complete workflow involves data preparation, tokenization, pre-training, and application to downstream tasks.
 
@@ -104,7 +122,7 @@ cd tokenizer
 python -u tokenizer_combine.py \
     --input_directory path/to/your/h5ad_files/  `# Directory with AnnData files` \
     --output_directory ./tokenized_data/         `# Directory to save tokenized parquet file` \
-    --output_prefix your_dataset                   `# Prefix for output files`
+    --output_prefix my_dataset                   `# Prefix for output files`
 ```
 
 ### 3. Pre-training
@@ -118,7 +136,7 @@ cd pretrain
 python -u scDMC_pretrain.py \
     --dataset_path path/to/tokenized_data.parquet \
     --output_dir ./scDMC_pretrained_model \
-    --batch_size 24 \
+    --num_train_epochs 24 \
     --learning_rate 5e-5
 ```
 > 👉 **Note**: For optimal performance and efficiency, our implementation leverages **FlashAttention** and **ALiBi** (Attention with Linear Biases), making it well-suited for the long sequences typical of single-cell data.
@@ -131,32 +149,36 @@ Apply the pre-trained model to various tasks like cell type annotation, clusteri
 cd downstream_tasks
 
 # Example: Fine-tuning for cell type annotation
-python -u downstream_tasks.py \
-    --pretrained_model_path path/to/scDMC_pretrained_model \
-    --finetune_data_path path/to/downstream_data \
-    --output_dir path/to/scDMC_finetuned_model
+python -u finetune.py \
+    --pretrained_model_path ./scDMC_pretrained_model \
+    --finetune_data_path path/to/labeled_data.parquet \
+    --output_path ./scDMC_finetuned_model
 
 # Example: Running a downstream task like data integration
 python -u integration.py \
-    --model_path path/to/finetuned_model \
-    --tokenized_data_path path/to/integration_data
+    --model_path ./scDMC_pretrained_model \
+    --tokenized_data_path path/to/integration_data.parquet
 ```
 
 ---
 
 ## Citation
 
-If you use scDMC in your research, we would appreciate it if you would cite our work:
+If you use scDMC in your research, please cite our published paper:
 
 ```bibtex
-@article{Guo2025scDMC,
-  title={Synergistic pre-training of single-cell language models with dual-stream MLM and contrastive learning},
-  author={},
-  journal={},
-  year={2025},
-  doi={},
-  publisher={}
+@article{guo2026unlocking,
+  title={Unlocking biological insight from single-cell data with an interpretable dual-stream foundation model},
+  author={Guo, Honglie and Cui, Qing and Zhang, Xiao and Chen, Chao and Zheng, Wei and Cai, Chen and others and Wang, Shuai},
+  journal={Genome Biology},
+  year={2026},
+  doi={10.1186/s13059-026-04193-w},
+  url={https://doi.org/10.1186/s13059-026-04193-w}
 }
+```
+
+```text
+Guo, H., Cui, Q., Zhang, X. et al. Unlocking biological insight from single-cell data with an interpretable dual-stream foundation model. Genome Biol (2026). https://doi.org/10.1186/s13059-026-04193-w
 ```
 
 ---
